@@ -93,6 +93,12 @@
     <Content Include="WManager.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>WManager.Context.cs</LastGenOutput>
+      <DependentUpon>WManager.edmx</DependentUpon>
+    </Content>
+    <Content Include="WManager.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>WManager.edmx</DependentUpon>
+      <LastGenOutput>WManager.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -101,15 +107,44 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
     <Compile Include="WManager.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WManager.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="WManager.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
     <Compile Include="WManager.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WManager.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="wmproject.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmprojectaccess.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmrole.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmsprint.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmtask.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmtoken.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
+    </Compile>
+    <Compile Include="wmuser.cs">
+      <DependentUpon>WManager.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +159,9 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>WManager.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="WManager.edmx.diagram">
+    <Content Include="WManager.edmx.diagram">
       <DependentUpon>WManager.edmx</DependentUpon>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
