@@ -9,15 +9,15 @@ namespace DotnetSimpleApi.Models
     {
         public WMprojectViewModel()
         {
-            this.wmprojectaccesses = new HashSet<wmprojectaccess>();
-            this.wmsprints = new HashSet<wmsprint>();
+            this.wmprojectaccesses = new HashSet<WMprojectaccesViewModel>();
+            this.wmsprints = new HashSet<WMsprintViewModel>();
         }
 
         public string id { get; set; }
         public string name { get; set; }
         public string descr { get; set; }
         public string acr { get; set; }
-        public virtual ICollection<wmprojectaccess> wmprojectaccesses { get; set; }
-        public virtual ICollection<wmsprint> wmsprints { get; set; }
+        public virtual ICollection<WMprojectaccesViewModel> wmprojectaccesses { get; set; }
+        public virtual ICollection<WMsprintViewModel> wmsprints { get; set; }
     }
 }

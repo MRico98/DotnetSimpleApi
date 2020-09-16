@@ -11,7 +11,7 @@ namespace DotnetSimpleApi.Models
         public string project_id { get; set; }
         public Nullable<int> users_id { get; set; }
 
-        public virtual wmproject wmproject { get; set; }
-        public virtual wmuser wmuser { get; set; }
+        public virtual WMprojectViewModel wmproject { get; set; }
+        public virtual WMuserViewModel wmuser { get; set; }
     }
 }
