@@ -18,6 +18,7 @@ namespace DotnetSimpleApi
         public WManagerEntities()
             : base("name=WManagerEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

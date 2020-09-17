@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="wmproject">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="acr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="wmprojectaccesses" Relationship="Self.FK_UserRoleIdProyect" FromRole="wmproject" ToRole="wmprojectaccess" />
+    <NavigationProperty Name="wmsprints" Relationship="Self.FK_wmsprint_id_project" FromRole="wmproject" ToRole="wmsprint" />
+  </EntityType>
+  <EntityType Name="wmprojectaccess">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="project_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="users_id" Type="Int32" />
+    <NavigationProperty Name="wmproject" Relationship="Self.FK_UserRoleIdProyect" FromRole="wmprojectaccess" ToRole="wmproject" />
+    <NavigationProperty Name="wmuser" Relationship="Self.FK_UserRoleWMUserId" FromRole="wmprojectaccess" ToRole="wmuser" />
+  </EntityType>
+  <EntityType Name="wmrole">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="wmusers" Relationship="Self.FK_UserWalookRoleId" FromRole="wmrole" ToRole="wmuser" />
+  </EntityType>
+  <EntityType Name="wmsprint">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="id_project" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="date_init" Type="DateTime" Precision="0" />
+    <Property Name="date_end" Type="DateTime" Precision="0" />
+    <Property Name="status" Type="Int32" />
+    <Property Name="is_completed" Type="Boolean" />
+    <Property Name="namesprint" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="wmproject" Relationship="Self.FK_wmsprint_id_project" FromRole="wmsprint" ToRole="wmproject" />
+    <NavigationProperty Name="wmtasks" Relationship="Self.FK_wmtask_id_sprint" FromRole="wmsprint" ToRole="wmtask" />
+  </EntityType>
+  <EntityType Name="wmtask">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="id_sprint" Type="Int32" />
+    <Property Name="name" Type="String" MaxLength="390" FixedLength="false" Unicode="false" />
+    <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="time_estimate" Type="Double" />
+    <Property Name="time_worked" Type="Double" />
+    <Property Name="time_remaining" Type="Double" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="is_req" Type="Boolean" />
+    <NavigationProperty Name="wmsprint" Relationship="Self.FK_wmtask_id_sprint" FromRole="wmtask" ToRole="wmsprint" />
+  </EntityType>
+  <EntityType Name="wmtoken">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="expiration_date" Type="DateTime" Precision="3" />
+    <Property Name="id_user" Type="Int32" />
+    <NavigationProperty Name="wmuser" Relationship="Self.FK__wmtokens__id_use__625A9A57" FromRole="wmtokens" ToRole="wmuser" />
+  </EntityType>
+  <EntityType Name="wmuser">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="pwd" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="route_img" Type="String" MaxLength="1020" FixedLength="false" Unicode="false" />
+    <Property Name="reset_password_token" Type="String" MaxLength="1020" FixedLength="false" Unicode="false" />
+    <Property Name="reset_password_expires" Type="DateTime" Precision="0" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="role_id" Type="Int32" />
+    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="wmprojectaccesses" Relationship="Self.FK_UserRoleWMUserId" FromRole="wmuser" ToRole="wmprojectaccess" />
+    <NavigationProperty Name="wmrole" Relationship="Self.FK_UserWalookRoleId" FromRole="wmuser" ToRole="wmrole" />
+    <NavigationProperty Name="wmtokens" Relationship="Self.FK__wmtokens__id_use__625A9A57" FromRole="wmuser" ToRole="wmtokens" />
+  </EntityType>
+  <Association Name="FK_UserRoleIdProyect">
+    <End Role="wmproject" Type="Self.wmproject" Multiplicity="0..1" />
+    <End Role="wmprojectaccess" Type="Self.wmprojectaccess" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmproject">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmprojectaccess">
+        <PropertyRef Name="project_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_wmsprint_id_project">
+    <End Role="wmproject" Type="Self.wmproject" Multiplicity="0..1" />
+    <End Role="wmsprint" Type="Self.wmsprint" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmproject">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmsprint">
+        <PropertyRef Name="id_project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoleWMUserId">
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="0..1" />
+    <End Role="wmprojectaccess" Type="Self.wmprojectaccess" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmuser">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmprojectaccess">
+        <PropertyRef Name="users_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserWalookRoleId">
+    <End Role="wmrole" Type="Self.wmrole" Multiplicity="0..1" />
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmrole">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmuser">
+        <PropertyRef Name="role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_wmtask_id_sprint">
+    <End Role="wmsprint" Type="Self.wmsprint" Multiplicity="0..1" />
+    <End Role="wmtask" Type="Self.wmtask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmsprint">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmtask">
+        <PropertyRef Name="id_sprint" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__wmtokens__id_use__625A9A57">
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="0..1" />
+    <End Role="wmtokens" Type="Self.wmtoken" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmuser">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmtokens">
+        <PropertyRef Name="id_user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WManagerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="wmprojects" EntityType="Self.wmproject" />
+    <EntitySet Name="wmprojectaccesses" EntityType="Self.wmprojectaccess" />
+    <EntitySet Name="wmroles" EntityType="Self.wmrole" />
+    <EntitySet Name="wmsprints" EntityType="Self.wmsprint" />
+    <EntitySet Name="wmtasks" EntityType="Self.wmtask" />
+    <EntitySet Name="wmtokens" EntityType="Self.wmtoken" />
+    <EntitySet Name="wmusers" EntityType="Self.wmuser" />
+    <AssociationSet Name="FK_UserRoleIdProyect" Association="Self.FK_UserRoleIdProyect">
+      <End Role="wmproject" EntitySet="wmprojects" />
+      <End Role="wmprojectaccess" EntitySet="wmprojectaccesses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_wmsprint_id_project" Association="Self.FK_wmsprint_id_project">
+      <End Role="wmproject" EntitySet="wmprojects" />
+      <End Role="wmsprint" EntitySet="wmsprints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoleWMUserId" Association="Self.FK_UserRoleWMUserId">
+      <End Role="wmuser" EntitySet="wmusers" />
+      <End Role="wmprojectaccess" EntitySet="wmprojectaccesses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserWalookRoleId" Association="Self.FK_UserWalookRoleId">
+      <End Role="wmrole" EntitySet="wmroles" />
+      <End Role="wmuser" EntitySet="wmusers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_wmtask_id_sprint" Association="Self.FK_wmtask_id_sprint">
+      <End Role="wmsprint" EntitySet="wmsprints" />
+      <End Role="wmtask" EntitySet="wmtasks" />
+    </AssociationSet>
+    <AssociationSet Name="FK__wmtokens__id_use__625A9A57" Association="Self.FK__wmtokens__id_use__625A9A57">
+      <End Role="wmuser" EntitySet="wmusers" />
+      <End Role="wmtokens" EntitySet="wmtokens" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

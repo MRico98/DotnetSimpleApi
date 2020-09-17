@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="wmproject">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="100" />
+    <Property Name="descr" Type="text" />
+    <Property Name="acr" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="wmprojectaccess">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="varchar" MaxLength="100" />
+    <Property Name="users_id" Type="int" />
+  </EntityType>
+  <EntityType Name="wmrole">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="24" />
+    <Property Name="description" Type="text" />
+  </EntityType>
+  <EntityType Name="wmsprint">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="id_project" Type="varchar" MaxLength="100" />
+    <Property Name="date_init" Type="date" />
+    <Property Name="date_end" Type="date" />
+    <Property Name="status" Type="int" />
+    <Property Name="is_completed" Type="bit" />
+    <Property Name="namesprint" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="wmtask">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="id_sprint" Type="int" />
+    <Property Name="name" Type="varchar" MaxLength="390" />
+    <Property Name="type" Type="varchar" MaxLength="60" />
+    <Property Name="time_estimate" Type="float" />
+    <Property Name="time_worked" Type="float" />
+    <Property Name="time_remaining" Type="float" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="is_req" Type="bit" />
+  </EntityType>
+  <EntityType Name="wmtokens">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="token" Type="varchar" MaxLength="255" />
+    <Property Name="expiration_date" Type="datetime" />
+    <Property Name="id_user" Type="int" />
+  </EntityType>
+  <EntityType Name="wmuser">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="24" />
+    <Property Name="email" Type="varchar" MaxLength="80" />
+    <Property Name="pwd" Type="varchar" MaxLength="60" />
+    <Property Name="route_img" Type="varchar" MaxLength="1020" />
+    <Property Name="reset_password_token" Type="varchar" MaxLength="1020" />
+    <Property Name="reset_password_expires" Type="date" />
+    <Property Name="status" Type="bit" />
+    <Property Name="role_id" Type="int" />
+    <Property Name="name" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <Association Name="FK__wmtokens__id_use__625A9A57">
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="0..1" />
+    <End Role="wmtokens" Type="Self.wmtokens" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmuser">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmtokens">
+        <PropertyRef Name="id_user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoleIdProyect">
+    <End Role="wmproject" Type="Self.wmproject" Multiplicity="0..1" />
+    <End Role="wmprojectaccess" Type="Self.wmprojectaccess" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmproject">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmprojectaccess">
+        <PropertyRef Name="project_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoleWMUserId">
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="0..1" />
+    <End Role="wmprojectaccess" Type="Self.wmprojectaccess" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmuser">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmprojectaccess">
+        <PropertyRef Name="users_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserWalookRoleId">
+    <End Role="wmrole" Type="Self.wmrole" Multiplicity="0..1" />
+    <End Role="wmuser" Type="Self.wmuser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmrole">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmuser">
+        <PropertyRef Name="role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_wmsprint_id_project">
+    <End Role="wmproject" Type="Self.wmproject" Multiplicity="0..1" />
+    <End Role="wmsprint" Type="Self.wmsprint" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmproject">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmsprint">
+        <PropertyRef Name="id_project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_wmtask_id_sprint">
+    <End Role="wmsprint" Type="Self.wmsprint" Multiplicity="0..1" />
+    <End Role="wmtask" Type="Self.wmtask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="wmsprint">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="wmtask">
+        <PropertyRef Name="id_sprint" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WManagerModelStoreContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmproject" EntityType="Self.wmproject" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmprojectaccess" EntityType="Self.wmprojectaccess" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmrole" EntityType="Self.wmrole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmsprint" EntityType="Self.wmsprint" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmtask" EntityType="Self.wmtask" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmtokens" EntityType="Self.wmtokens" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="wmuser" EntityType="Self.wmuser" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__wmtokens__id_use__625A9A57" Association="Self.FK__wmtokens__id_use__625A9A57">
+      <End Role="wmuser" EntitySet="wmuser" />
+      <End Role="wmtokens" EntitySet="wmtokens" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoleIdProyect" Association="Self.FK_UserRoleIdProyect">
+      <End Role="wmproject" EntitySet="wmproject" />
+      <End Role="wmprojectaccess" EntitySet="wmprojectaccess" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoleWMUserId" Association="Self.FK_UserRoleWMUserId">
+      <End Role="wmuser" EntitySet="wmuser" />
+      <End Role="wmprojectaccess" EntitySet="wmprojectaccess" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserWalookRoleId" Association="Self.FK_UserWalookRoleId">
+      <End Role="wmrole" EntitySet="wmrole" />
+      <End Role="wmuser" EntitySet="wmuser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_wmsprint_id_project" Association="Self.FK_wmsprint_id_project">
+      <End Role="wmproject" EntitySet="wmproject" />
+      <End Role="wmsprint" EntitySet="wmsprint" />
+    </AssociationSet>
+    <AssociationSet Name="FK_wmtask_id_sprint" Association="Self.FK_wmtask_id_sprint">
+      <End Role="wmsprint" EntitySet="wmsprint" />
+      <End Role="wmtask" EntitySet="wmtask" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
