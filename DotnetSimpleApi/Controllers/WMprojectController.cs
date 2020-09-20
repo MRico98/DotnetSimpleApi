@@ -1,6 +1,7 @@
 ﻿using DotnetSimpleApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,7 +17,88 @@ namespace DotnetSimpleApi.Controllers
             IList<WMprojectViewModel> projects = null;
             using (var context = new WManagerEntities())
             {
-                projects = context.wmprojects.Include("wmprojectaccess")
+                projects = queryGet(context).ToList<WMprojectViewModel>();
+            }
+            if (projects.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(projects);
+        }
+
+        public IHttpActionResult GetProjectById(string id)
+        {
+            WMprojectViewModel project = null;
+            using (var context = new WManagerEntities())
+            {
+                project = queryGet(context).Where(s => s.id == id).FirstOrDefault();
+            }
+            if (project == null)
+            {
+                return NotFound();
+            }
+            return Ok(project);
+        }
+
+        public IHttpActionResult PostNewProject(WMprojectViewModel project)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+            using (var context = new WManagerEntities())
+            {
+                context.wmprojects.Add(new wmproject() 
+                {
+                    id = project.id,
+                    name = project.name,
+                    descr = project.descr,
+                    acr = project.acr
+                });
+                context.SaveChanges();
+            }
+            return Ok("Todo bien");
+        }
+
+        public IHttpActionResult PutProject(WMprojectViewModel project)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+            using(var context = new WManagerEntities())
+            {
+                wmproject existingproject = context.wmprojects.Where(s => s.id == project.id).FirstOrDefault<wmproject>();
+                if(existingproject != null)
+                {
+                    existingproject.id = project.id;
+                    existingproject.name = project.name;
+                    existingproject.descr = project.descr;
+                    existingproject.acr = project.acr;
+                    context.SaveChanges();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            return Ok();
+        }
+
+        public IHttpActionResult DeleteProject(String id)
+        {
+            using (var context = new WManagerEntities())
+            {
+                wmproject existingproject = context.wmprojects.Where(s => s.id == id).FirstOrDefault();
+                context.Entry(existingproject).State = System.Data.Entity.EntityState.Deleted;
+                context.SaveChanges();
+            }
+            return Ok();
+        }
+
+        private IQueryable<WMprojectViewModel> queryGet(WManagerEntities context)
+        {
+            return context.wmprojects
                     .Select(s => new WMprojectViewModel()
                     {
                         id = s.id,
@@ -78,13 +160,7 @@ namespace DotnetSimpleApi.Controllers
 
                             }).ToList<WMtaskViewModel>()
                         }).ToList<WMsprintViewModel>()
-                    }).ToList<WMprojectViewModel>();
-            }
-            if (projects.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(projects);
+                    });
         }
     }
 }
